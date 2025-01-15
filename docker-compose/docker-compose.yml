@@ -1,7 +1,6 @@
-version: '3.3'
 services:
   pbs-client:
-    image: aterfax/pbs-client
+    image: tmueller/pbs-client
     container_name: pbs-client
     hostname: pbs-client
     restart: unless-stopped
