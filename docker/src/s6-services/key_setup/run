@@ -26,7 +26,7 @@ master_public_keyfile="/root/.config/proxmox-backup/master-public.pem"
 
 expect="/usr/bin/expect"
 
-if [ -n "$UNENCRYPTED" ]; then
+if [ "$UNENCRYPTED" = "1" ]; then
         echo "Encryption not activated not gonna create any Keys."
 else
     # Check if client encryption keyfile exists and do stuff.
