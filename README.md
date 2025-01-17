@@ -21,12 +21,21 @@ For more in depth instructions, see: [Using-the-DockerHub-provided-image](#Using
 
 ## Table of Contents
 
+- [PI Customs](#PI)
 - [Quickstart](#Quickstart)
 - [Configuration](#Configuration)
 - [FAQ](#FAQ)
 - [Troubleshooting](#Troubleshooting)
 - [Contributing](#Contributing)
 - [License](#License)
+
+## PI
+
+### Changes
+
+Encryption can be turned off.
+Most of the Data is scientific related and does not contain any secrets and it would be a waste of ressources to encrypt that and loose the deduplication of it because older backups of similar data arent encrypted.
+For sensible data you can and should enable the encryption with its own set of keypairs and keep them stored seperate from the backups.
 
 ## Quickstart
 
@@ -79,9 +88,16 @@ The following environment variables can be configured to customize the behavior 
 
 | Variable Name      | Default Docker Compose Value | Valid Values           | Description                                                                                                           |
 |--------------------|------------------------------|------------------------|-----------------------------------------------------------------------------------------------------------------------|
-| Variable Name      | Default Docker Compose Value | Valid Values           | Description                                                                                                           |
-
-
+| PBS_ENDPOINT       | none                         | fqdn                   | target PBS-server                                                                                                     |
+| PBS_FINGERPRINT    | none                         | XX:XX:XX:XX...         | your fringerprint of your pbs instance                                                                                |
+| PBS_DATASTORE      | none                         | string                 | name of your pbs datastore                                                                                            |
+| PBS_DATASTORE_ns   | none                         | string                 | name of your pbs namespace                                                                                            |
+| CRON_SCHEDULE      | none                         | * * * * *              | cron expression to define the shedule for backups                                                                     |
+| CRON_BACKUP_ONLY   | none                         | boolean                | controls if first backup will be done at the first start                                                              |
+| PBS_API_KEY_NAME or PBS_USER | none               | string                 | credentials for pbs either define an api token or specify user                                                        | 
+| PBS_API_KEY_SECRET or PBS_PASSWORD | none         | string                 | password or secret                                                                                                    |
+| TZ                 | none                         | IANA's time zone database long | Timezone to use for tuimestamps in backup                                                                     |
+| UNENCRYPTED        | 0                            | boolean                | disables encryption if set to 1                                                                                       |
 
 ## FAQ
 
