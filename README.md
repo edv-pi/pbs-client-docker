@@ -1,6 +1,6 @@
 # Proxmox Backup Server: Client Docker
 
-![Build and Publish Docker Image](https://git.physi.uni-heidelberg.de/tmueller/pibackup/actions/workflows/build_image.yaml/badge.svg)
+![Build and Publish Docker Image](https://git.physi.uni-heidelberg.de/tmueller/pbs-client-docker/actions/workflows/build_image.yaml/badge.svg)
 
 ## **tl;dr?**
 
