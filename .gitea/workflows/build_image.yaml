@@ -25,7 +25,7 @@ jobs:
         uses: https://github.com/docker/build-push-action@v6
         with:
           context: ./docker
-          file: ./Dockerfile
+          file: Dockerfile
           push: true
           #tags: "images.physi.uni-heidelberg.de/pibackup,images.physi.uni-heidelberg.de/pibackup:latest"
           tags: ${{ steps.meta.outputs.tags }}
