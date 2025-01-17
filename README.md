@@ -1,8 +1,6 @@
 # Proxmox Backup Server: Client Docker
 
-[![Build and Publish Docker Image](https://github.com/Aterfax/pbs-client-docker/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/Aterfax/pbs-client-docker/actions/workflows/docker-publish.yml)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/aterfax/pbs-client/latest)
-![Docker Pulls](https://img.shields.io/docker/pulls/aterfax/pbs-client)
+![Build and Publish Docker Image](https://git.physi.uni-heidelberg.de/tmueller/pibackup/actions/workflows/build_image.yaml/badge.svg)
 
 ## **tl;dr?**
 
