@@ -98,6 +98,7 @@ The following environment variables can be configured to customize the behavior 
 | PBS_API_KEY_SECRET or PBS_PASSWORD | none         | string                 | password or secret                                                                                                    |
 | TZ                 | none                         | IANA's time zone database long | Timezone to use for tuimestamps in backup                                                                     |
 | UNENCRYPTED        | 0                            | boolean                | disables encryption if set to 1                                                                                       |
+| CHANGE_DETECT_MODE | metadata                     | metadata, data, legacy | Let you choose the desired mode for detecting file changes between backups                                            |
 
 ## FAQ
 
