@@ -1,0 +1,65 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+source /etc/s6-overlay/s6-rc.d/setup_check/run_include
+
+# We need to build this command in case namespaces are in use.
+LISTCMD="proxmox-backup-client snapshot list"
+if [ -n "$PBS_DATASTORE_NS" ]; then
+    LISTCMD+=" --ns ${PBS_DATASTORE_NS}"
+fi
+LISTCMD+=" --output-format json"
+
+data=$(${LISTCMD})
+host_name=$(hostname)
+
+# Backups in einer nummerierten Liste ausgeben
+options=$(echo "$data" | jq -r --arg host "$host_name" '
+    .[] |
+    select(.["backup-id"] == $host) |
+    "\(.["backup-type"])/\($host)/\(.["backup-time"] | tonumber | strftime("%Y-%m-%dT%H:%M:%SZ"))"')
+
+# Array erstellen und anzeigen
+echo "Verfügbare Backups:"
+IFS=$'\n' read -d '' -r -a backups <<< "$options"
+for i in "${!backups[@]}"; do
+    echo "$((i + 1)). ${backups[i]}"
+done
+
+# Benutzereingabe für die Auswahl
+read -p "Wählen Sie ein Backup aus (Nummer eingeben): " selection
+
+# Überprüfen, ob die Eingabe gültig ist
+if [[ "$selection" -ge 1 && "$selection" -le "${#backups[@]}" ]]; then
+    selected_backup="${backups[$((selection - 1))]}"
+    echo "Ausgewähltes Backup: $selected_backup"
+
+    # Dateien des ausgewählten Backups abrufen
+    backup_index=$((selection - 1))
+    files=$(echo "$data" | jq -r --argjson index "$backup_index" '
+        .[$index].files[].filename')
+
+    # Dateien in einer nummerierten Liste ausgeben
+    echo "Verfügbare Dateien:"
+    IFS=$'\n' read -d '' -r -a file_list <<< "$files"
+    for i in "${!file_list[@]}"; do
+        echo "$((i + 1)). ${file_list[i]}"
+    done
+
+    # Benutzereingabe für die Dateiauswahl
+    read -p "Wählen Sie eine Datei aus (Nummer eingeben): " file_selection
+
+    # Überprüfen, ob die Eingabe gültig ist
+    if [[ "$file_selection" -ge 1 && "$file_selection" -le "${#file_list[@]}" ]]; then
+        selected_file="${file_list[$((file_selection - 1))]}"
+        echo "Ausgewählte Datei: $selected_file"
+    else
+        echo "Ungültige Auswahl. Abbruch."
+        exit 1
+    fi
+else
+    echo "Ungültige Auswahl. Abbruch."
+    exit 1
+fi
+
+
