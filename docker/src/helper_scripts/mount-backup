@@ -4,9 +4,11 @@
 source /etc/s6-overlay/s6-rc.d/setup_check/run_include
 
 # We need to build this command in case namespaces are in use.
+MOUNTCMD="proxmox-backup-client mount"
 LISTCMD="proxmox-backup-client snapshot list"
 if [ -n "$PBS_DATASTORE_NS" ]; then
     LISTCMD+=" --ns ${PBS_DATASTORE_NS}"
+    MOUNTCMD+=" --ns ${PBS_DATASTORE_NS}"
 fi
 LISTCMD+=" --output-format json"
 
@@ -32,12 +34,13 @@ read -p "Wählen Sie ein Backup aus (Nummer eingeben): " selection
 # Überprüfen, ob die Eingabe gültig ist
 if [[ "$selection" -ge 1 && "$selection" -le "${#backups[@]}" ]]; then
     selected_backup="${backups[$((selection - 1))]}"
+    MOUNTCMD+=" $selected_backup"
     echo "Ausgewähltes Backup: $selected_backup"
 
     # Dateien des ausgewählten Backups abrufen
     backup_index=$((selection - 1))
     files=$(echo "$data" | jq -r --argjson index "$backup_index" '
-        .[$index].files[].filename')
+        .[$index].files[].filename | select(test("\\.pxar.didx$|\\.mpxar.didx$"))')
 
     # Dateien in einer nummerierten Liste ausgeben
     echo "Verfügbare Dateien:"
@@ -52,7 +55,9 @@ if [[ "$selection" -ge 1 && "$selection" -le "${#backups[@]}" ]]; then
     # Überprüfen, ob die Eingabe gültig ist
     if [[ "$file_selection" -ge 1 && "$file_selection" -le "${#file_list[@]}" ]]; then
         selected_file="${file_list[$((file_selection - 1))]}"
+        MOUNTCMD+=" $selected_file"
         echo "Ausgewählte Datei: $selected_file"
+        echo "DEBUG: $MOUNTCMD"
     else
         echo "Ungültige Auswahl. Abbruch."
         exit 1
