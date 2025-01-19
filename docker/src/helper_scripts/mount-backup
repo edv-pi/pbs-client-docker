@@ -60,6 +60,8 @@ if [[ "$selection" -ge 1 && "$selection" -le "${#backups[@]}" ]]; then
         echo "DEBUG: $MOUNTCMD"
         MOUNTCMD+=" /restore"
         $(${MOUNTCMD})
+        read -p "Enter command to test: " debugcmd
+        $(${debugcmd})
     else
         echo "Ungültige Auswahl. Abbruch."
         exit 1
