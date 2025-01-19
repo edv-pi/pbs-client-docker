@@ -60,8 +60,7 @@ if [[ "$selection" -ge 1 && "$selection" -le "${#backups[@]}" ]]; then
         echo "DEBUG: $MOUNTCMD"
         MOUNTCMD+=" /restore"
         $(${MOUNTCMD})
-        read -p "Enter command to test: " debugcmd
-        $(${debugcmd})
+        echo "Dont forget to unmount when finished (just umount /path/on/the/host i.e. /restore)"
     else
         echo "Ungültige Auswahl. Abbruch."
         exit 1

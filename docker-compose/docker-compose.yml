@@ -11,8 +11,17 @@ services:
       - /run:exec
     volumes:
       - ./pbsconfig/:/root/.config/proxmox-backup/
-      # Note - if you want to restore backups make sure to change to read write below.
-      # See the 'restore-backup' command inside the container.
       - ./backups/test1:/backups/test1:ro
       - ./backups/test2:/backups/test2:ro
       - ./backups/test3:/backups/test3:ro
+      - type: bind
+        source: /restore
+        target: /restore
+        bind:
+          propagation: rshared
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse:/dev/fuse
+    security_opt:
+      - apparmor:unconfined
