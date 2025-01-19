@@ -58,6 +58,8 @@ if [[ "$selection" -ge 1 && "$selection" -le "${#backups[@]}" ]]; then
         MOUNTCMD+=" $selected_file"
         echo "Ausgewählte Datei: $selected_file"
         echo "DEBUG: $MOUNTCMD"
+        MOUNTCMD+=" /restore"
+        $(MOUNTCMD)
     else
         echo "Ungültige Auswahl. Abbruch."
         exit 1
